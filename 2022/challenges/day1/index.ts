@@ -1,4 +1,4 @@
-import { readFileSync } from "fs-extra";
+import { getFileContent } from "../../utils";
 
 const getHighestCaloryCount = (elveArray: number[]) => {
   const sortedArray = elveArray.sort((a, b) => b - a);
@@ -10,8 +10,7 @@ const createElveArray = () => {
   const elveArray: number[] = [0];
   let elveIndex = 0;
 
-  const content = readFileSync("./challenges/day1/input.txt", "utf-8");
-  content.split(/\r?\n/).forEach((line) => {
+  getFileContent("./challenges/day1/input.txt").forEach((line) => {
     if (line === "") {
       elveArray.push(0);
       elveIndex++;
