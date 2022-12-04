@@ -10,7 +10,7 @@ const createElveArray = () => {
   const elveArray: number[] = [0];
   let elveIndex = 0;
 
-  getFileContent("./challenges/day1/input.txt").forEach((line) => {
+  getFileContent("1").forEach((line) => {
     if (line === "") {
       elveArray.push(0);
       elveIndex++;

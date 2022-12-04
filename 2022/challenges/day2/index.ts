@@ -65,7 +65,7 @@ const getLoserMove = (opponent: string) => {
 };
 
 export const day2 = () => {
-  const content = getFileContent("./challenges/day2/input.txt");
+  const content = getFileContent("2");
   const res1 = content.reduce(
     (prev, current) => prev + calculateRoundScore(current),
     0
