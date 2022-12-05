@@ -2,8 +2,8 @@ import { readFileSync } from "fs-extra";
 
 export const logResults = (
   dayNumber: number,
-  resPt1?: string,
-  resPt2?: string
+  resPt1?: string | number,
+  resPt2?: string | number
 ) => {
   console.log(`~~ Day ${dayNumber} ~~`);
   if (resPt1) console.log("Part 1: ", resPt1);

@@ -1,9 +1,12 @@
-import { getFileContent } from "../../utils";
+import { getFileContent, logResults } from "../../utils";
 
 const getHighestCaloryCount = (elveArray: number[]) => {
   const sortedArray = elveArray.sort((a, b) => b - a);
-  console.log("First:", sortedArray[0]);
-  console.log("Second:", sortedArray[0] + sortedArray[1] + sortedArray[2]);
+  logResults(
+    1,
+    sortedArray[0],
+    sortedArray[0] + sortedArray[1] + sortedArray[2]
+  );
 };
 
 const createElveArray = () => {

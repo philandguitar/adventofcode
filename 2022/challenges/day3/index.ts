@@ -1,4 +1,4 @@
-import { getFileContent } from "../../utils";
+import { getFileContent, logResults } from "../../utils";
 
 const getDuplicatedItemPriority = (rucksack: string) => {
   const first = rucksack.substring(0, rucksack.length / 2);
@@ -34,14 +34,13 @@ export const day3 = () => {
     0
   );
 
-  console.log("Part 1: ", res1);
-
   let res2 = 0;
 
   for (let i = 0; i < content.length; i += 3) {
     res2 += getGroupBadgePriority(content[i], content[i + 1], content[i + 2]);
   }
-  console.log("Part 2: ", res2);
+
+  logResults(3, res1, res2);
 };
 
 const priority: Record<string, number> = {

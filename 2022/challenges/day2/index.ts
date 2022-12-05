@@ -1,4 +1,4 @@
-import { getFileContent } from "../../utils";
+import { getFileContent, logResults } from "../../utils";
 
 const moveToValue = (move: string) => {
   switch (move) {
@@ -70,12 +70,12 @@ export const day2 = () => {
     (prev, current) => prev + calculateRoundScore(current),
     0
   );
-  console.log("Part 1: ", res1);
 
   const res2 = content.reduce(
     (prev, current) =>
       prev + calculateRoundScore(alterRoundToGetOwnMove(current)),
     0
   );
-  console.log("Part 2: ", res2);
+
+  logResults(2, res1, res2);
 };
