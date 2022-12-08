@@ -7,7 +7,7 @@ type Tree = {
 };
 
 export const day8 = () => {
-  const content = getFileContent("8", "input3.txt");
+  const content = getFileContent("8");
   const treeMatrix = content.map((row) =>
     row.split("").map(
       (val): Tree => ({
@@ -68,10 +68,22 @@ const checkVisibility = (treeMatrix: Tree[][], x: number, y: number) => {
 };
 
 const getScenicScore = (treeMatrix: Tree[][], x: number, y: number) => {
-  let left = 0;
-  let right = 0;
-  let top = 0;
-  let bot = 0;
+  let left = {
+    foundEnd: false,
+    score: 0,
+  };
+  let right = {
+    foundEnd: false,
+    score: 0,
+  };
+  let top = {
+    foundEnd: false,
+    score: 0,
+  };
+  let bot = {
+    foundEnd: false,
+    score: 0,
+  };
 
   const maxTotalDistance = Math.max(
     x,
@@ -80,25 +92,42 @@ const getScenicScore = (treeMatrix: Tree[][], x: number, y: number) => {
     treeMatrix[0].length - x
   );
 
-  for (let i = 0; i < maxTotalDistance; i++) {
-    if (x - i >= 0 && treeMatrix[y][x].height > treeMatrix[y][x - i].height) {
-      left++;
+  for (let i = 1; i < maxTotalDistance; i++) {
+    if (!left.foundEnd) {
+      if (x - i <= 0 || treeMatrix[y][x].height <= treeMatrix[y][x - i].height)
+        left.foundEnd = true;
+
+      if (x - i >= 0) left.score++;
     }
-    if (y - i >= 0 && treeMatrix[y][x].height > treeMatrix[y - i][x].height) {
-      top++;
+
+    if (!top.foundEnd) {
+      if (y - i <= 0 || treeMatrix[y][x].height <= treeMatrix[y - i][x].height)
+        top.foundEnd = true;
+
+      if (y - i >= 0) top.score++;
     }
-    if (
-      x + i < treeMatrix[0].length &&
-      treeMatrix[y][x].height > treeMatrix[y][x + i].height
-    ) {
-      right++;
+
+    if (!right.foundEnd) {
+      if (
+        x + i >= treeMatrix[0].length - 1 ||
+        treeMatrix[y][x].height <= treeMatrix[y][x + i].height
+      ) {
+        right.foundEnd = true;
+      }
+
+      if (x + i < treeMatrix[0].length) right.score++;
     }
-    if (
-      y + i < treeMatrix.length &&
-      treeMatrix[y][x].height > treeMatrix[y + i][x].height
-    ) {
-      bot++;
+
+    if (!bot.foundEnd) {
+      if (
+        y + i >= treeMatrix.length - 1 ||
+        treeMatrix[y][x].height <= treeMatrix[y + i][x].height
+      )
+        bot.foundEnd = true;
+
+      if (y + i < treeMatrix.length) bot.score++;
     }
   }
-  return left * right * top * bot;
+
+  return left.score * right.score * top.score * bot.score;
 };
