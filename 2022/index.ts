@@ -1,6 +1,7 @@
 import { day1 } from "./challenges/day1";
 import { day10 } from "./challenges/day10";
 import { day11 } from "./challenges/day11";
+import { day12 } from "./challenges/day12";
 import { day2 } from "./challenges/day2";
 import { day3 } from "./challenges/day3";
 import { day4 } from "./challenges/day4";
@@ -20,4 +21,5 @@ import { day9 } from "./challenges/day9";
 // day8();
 // day9();
 // day10();
-day11();
+// day11();
+day12();
