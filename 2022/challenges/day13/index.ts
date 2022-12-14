@@ -8,31 +8,20 @@ enum Result {
   UNCLEAR,
 }
 
-const compareArrays = (
-  left: ArrayContent[],
-  right: ArrayContent[],
-  isThereMore: boolean
-): Result => {
-  console.log(left, "----", right);
-  console.log();
+const compareArrays = (left: ArrayContent[], right: ArrayContent[]): Result => {
+  // console.log(left, "----", right);
+  // console.log();
 
   const limit = Math.min(left.length, right.length);
   for (let i = 0; i < limit; i++) {
+    // both are numbers
     if (Number.isInteger(left[i]) && Number.isInteger(right[i])) {
-      // console.log("Both numbers");
-
+      // same number => to the next item
       if (left[i] === right[i]) {
         continue;
       }
 
-      if (left[i] > right[i])
-        console.log(
-          "Validate Correctness: ",
-          left[i],
-          right[i],
-          left[i] < right[i]
-        );
-
+      // check correct size
       return left[i] < right[i] ? Result.RIGHT : Result.FALSE;
     }
 
@@ -43,78 +32,94 @@ const compareArrays = (
       ? (right[i] as ArrayContent[])
       : [right[i]];
 
+    // one array is empty
     if (Math.min(newLeft.length, newRight.length) === 0) {
-      console.log("one empty");
-
-      if (newLeft.length == newRight.length && limit > i + 1) {
-        console.log("both empty but not end of the world");
-
-        continue;
-      }
-      if (isThereMore) {
-        console.log("there is more");
-
+      // both are empty, but there are more items in the parent
+      if (newLeft.length == newRight.length) {
+        if (limit > i + 1) {
+          continue;
+        }
         return Result.UNCLEAR;
-      }
-
-      if (!(newLeft.length < newRight.length)) {
-        console.log(
-          "One, empty, left smaller",
-          newLeft,
-          " ..... ",
-          newRight,
-          newLeft.length < newRight.length
-        );
       }
 
       return newLeft.length < newRight.length ? Result.RIGHT : Result.FALSE;
     }
 
-    console.log("Next: ", newLeft, "+++++++++++", newRight);
-
-    // // console.log("New Left: ", newLeft, "New Right: ", newRight);
-    console.log("Limit break: ", i + 1, limit);
-
-    const compareNested = compareArrays(newLeft, newRight, i + 1 < limit);
+    const compareNested = compareArrays(newLeft, newRight);
     // console.log("Nested: ", Result[compareNested]);
 
     if (compareNested === Result.UNCLEAR) continue;
     return compareNested;
   }
-  if (isThereMore) {
-    return Result.UNCLEAR;
-  }
-
-  console.log("Out of length: ", left, right);
 
   return left.length < right.length ? Result.RIGHT : Result.FALSE;
 };
 
 export const day13 = () => {
-  const content = getFileContent("13")
-    .filter((line) => line != "")
-    .map((line) => JSON.parse(line));
+  const content = getFileContent("13").filter((line) => line != "");
+
+  const contentv1 = content.map((line) => JSON.parse(line));
 
   let res1 = 0;
 
   for (let i = 0; i < content.length; i = i + 2) {
-    const isCorrect = compareArrays(content[i], content[i + 1], false);
+    const isCorrect = compareArrays(contentv1[i], contentv1[i + 1]);
     // // console.log("Pair: ", i / 2 + 1, Result[isCorrect]);
 
     if (isCorrect == Result.RIGHT) {
       res1 += i / 2 + 1;
 
-      console.log("Right:", i / 2 + 1);
-      console.log("Zwischenstand: ", res1);
+      // console.log("Right:", i / 2 + 1);
+      // console.log("Zwischenstand: ", res1);
     }
 
     if (isCorrect == Result.FALSE) {
-      console.log("False:", i / 2 + 1);
+      // console.log("False:", i / 2 + 1);
     }
     if (isCorrect == Result.UNCLEAR) {
       console.log(i / 2, "WHAT THE HELL?!");
     }
   }
 
-  logResults(13, res1);
+  const contentv2 = contentv1;
+
+  const k1 = [[2]];
+  const k2 = [[6]];
+  contentv2.push(k1);
+  contentv2.push(k2);
+
+  const sorted = contentv2.sort((a, b) =>
+    compareArrays(a, b) == Result.RIGHT ? -1 : 1
+  );
+
+  sorted.forEach((a, i) => console.log(i, ": ", JSON.stringify(a)));
+
+  // let part2 = content.map((input) => {
+  //   if (!/\d/.test(input)) {
+  //     return "0";
+  //   }
+  //   const tmp = input.replace(/\[/g, "").replace(/\]/g, "").replace(/\,/g, "");
+  //   return tmp;
+  // });
+
+  // const maxLength = part2.reduce(
+  //   (prev, curr) => Math.min(curr.length, prev),
+  //   1000
+  // );
+
+  // // part2.forEach((a) => console.log(a));
+
+  // part2.push("2");
+  // part2.push("6");
+
+  // part2 = part2.sort((a, b) => (compareArrays(a, b) == Result.RIGHT ? -1 : 1));
+
+  // part2.forEach((a) => console.log(a));
+
+  const key1 = sorted.findIndex((k) => k === k1) + 1;
+  const key2 = sorted.findIndex((k) => k === k2) + 1;
+
+  const res2 = key1 * key2;
+
+  logResults(13, res1, res2);
 };
