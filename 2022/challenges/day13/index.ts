@@ -9,16 +9,22 @@ enum Result {
 }
 
 const compareArrays = (left: ArrayContent[], right: ArrayContent[]): Result => {
-  // console.log(left, "----", right);
-  // console.log();
-
   const limit = Math.min(left.length, right.length);
   for (let i = 0; i < limit; i++) {
     // both are numbers
     if (Number.isInteger(left[i]) && Number.isInteger(right[i])) {
       // same number => to the next item
       if (left[i] === right[i]) {
-        continue;
+        // next item if there are more
+        if (limit > i + 1) {
+          continue;
+        }
+        // if one of them is bigger
+        if (left.length > right.length) return Result.FALSE;
+        if (left.length < right.length) return Result.RIGHT;
+
+        //else unclear
+        return Result.UNCLEAR;
       }
 
       // check correct size
@@ -32,13 +38,16 @@ const compareArrays = (left: ArrayContent[], right: ArrayContent[]): Result => {
       ? (right[i] as ArrayContent[])
       : [right[i]];
 
-    // one array is empty
+    // at least one array is empty
     if (Math.min(newLeft.length, newRight.length) === 0) {
       // both are empty, but there are more items in the parent
       if (newLeft.length == newRight.length) {
         if (limit > i + 1) {
           continue;
         }
+
+        if (left.length > right.length) return Result.FALSE;
+        if (left.length < right.length) return Result.RIGHT;
         return Result.UNCLEAR;
       }
 
@@ -46,13 +55,14 @@ const compareArrays = (left: ArrayContent[], right: ArrayContent[]): Result => {
     }
 
     const compareNested = compareArrays(newLeft, newRight);
-    // console.log("Nested: ", Result[compareNested]);
 
     if (compareNested === Result.UNCLEAR) continue;
     return compareNested;
   }
 
-  return left.length < right.length ? Result.RIGHT : Result.FALSE;
+  if (left.length > right.length) return Result.FALSE;
+  if (left.length < right.length) return Result.RIGHT;
+  return Result.UNCLEAR;
 };
 
 export const day13 = () => {
@@ -64,20 +74,9 @@ export const day13 = () => {
 
   for (let i = 0; i < content.length; i = i + 2) {
     const isCorrect = compareArrays(contentv1[i], contentv1[i + 1]);
-    // // console.log("Pair: ", i / 2 + 1, Result[isCorrect]);
 
     if (isCorrect == Result.RIGHT) {
       res1 += i / 2 + 1;
-
-      // console.log("Right:", i / 2 + 1);
-      // console.log("Zwischenstand: ", res1);
-    }
-
-    if (isCorrect == Result.FALSE) {
-      // console.log("False:", i / 2 + 1);
-    }
-    if (isCorrect == Result.UNCLEAR) {
-      console.log(i / 2, "WHAT THE HELL?!");
     }
   }
 
@@ -88,33 +87,17 @@ export const day13 = () => {
   contentv2.push(k1);
   contentv2.push(k2);
 
-  const sorted = contentv2.sort((a, b) =>
-    compareArrays(a, b) == Result.RIGHT ? -1 : 1
-  );
+  const sorted = contentv2.sort((a, b) => {
+    const res = compareArrays(a, b);
 
-  sorted.forEach((a, i) => console.log(i, ": ", JSON.stringify(a)));
-
-  // let part2 = content.map((input) => {
-  //   if (!/\d/.test(input)) {
-  //     return "0";
-  //   }
-  //   const tmp = input.replace(/\[/g, "").replace(/\]/g, "").replace(/\,/g, "");
-  //   return tmp;
-  // });
-
-  // const maxLength = part2.reduce(
-  //   (prev, curr) => Math.min(curr.length, prev),
-  //   1000
-  // );
-
-  // // part2.forEach((a) => console.log(a));
-
-  // part2.push("2");
-  // part2.push("6");
-
-  // part2 = part2.sort((a, b) => (compareArrays(a, b) == Result.RIGHT ? -1 : 1));
-
-  // part2.forEach((a) => console.log(a));
+    if (res == Result.RIGHT) {
+      return -1;
+    }
+    if (res == Result.FALSE) {
+      return 1;
+    }
+    return 0;
+  });
 
   const key1 = sorted.findIndex((k) => k === k1) + 1;
   const key2 = sorted.findIndex((k) => k === k2) + 1;
