@@ -21,6 +21,9 @@ export const getFileContent = (
   return content.split(/\r?\n/);
 };
 
+export const getFileMatrix = (dayNumber: string | number, fileName?: string) =>
+  getFileContent(dayNumber, fileName).map(line => line.split(""))
+
 export const stringArrayToNumberArray = (stringArr: string[]) => {
   return stringArr.map((val) => Number.parseInt(val));
 };
