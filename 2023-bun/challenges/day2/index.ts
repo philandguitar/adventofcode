@@ -1,9 +1,7 @@
-import { getFileContent, logResults } from "../../utils"
+import { getFileContent } from "../../utils"
 
-const DAY = 2;
-
-const a = (): number => {
-    const lines = getFileContent(DAY);
+export const a = (): number => {
+    const lines = getFileContent(import.meta.dir);
 
     const data = lines.reduce((prev, current) => {
         const vals = getGameData(current);
@@ -18,9 +16,8 @@ const a = (): number => {
     return data;
 }
 
-
-const b = (): number => {
-    const lines = getFileContent(DAY);
+export const b = (): number => {
+    const lines = getFileContent(import.meta.dir);
 
     const data = lines.reduce((prev, current) => {
         const vals = getGameData(current);
@@ -29,8 +26,6 @@ const b = (): number => {
 
     return data;
 }
-
-export const day2 = () => logResults(DAY, a(), b())
 
 const getGameData = (line: string) => {
     const [game, subsets] = line.split(":");
@@ -46,7 +41,8 @@ const getGameData = (line: string) => {
 
     colors.forEach(item => {
         const [amount, color] = item.trim().split(" ");
-        data[color] = Math.max(Number.parseInt(amount), data[color]);
+        const colorKey = color as keyof typeof data;
+        data[colorKey] = Math.max(Number.parseInt(amount), data[colorKey]);
     });
 
     return {

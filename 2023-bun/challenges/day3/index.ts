@@ -1,6 +1,4 @@
-import { getFileContent, getFileMatrix, logResults } from "../../utils"
-
-const DAY = 3;
+import { getFileMatrix } from "../../utils"
 
 type Information = {
     value: string;
@@ -9,7 +7,7 @@ type Information = {
     startX: number;
 }
 
-const a = (): number => {
+export const a = (): number => {
     const information = getNumberInformation();
 
     return information.reduce((prev, current) => {
@@ -18,8 +16,8 @@ const a = (): number => {
     }, 0);
 }
 
-const b = (): number => {
-    const fields = getFileMatrix(DAY);
+export const b = (): number => {
+    const fields = getFileMatrix(import.meta.dir);
 
     const information = getNumberInformation();
     let ratioSum = 0;
@@ -56,10 +54,8 @@ const b = (): number => {
     return ratioSum;
 }
 
-export const day3 = () => logResults(DAY, a(), b());
-
 const getNumberInformation = () => {
-    const fields = getFileMatrix(DAY);
+    const fields = getFileMatrix(import.meta.dir);
 
     const information: Information[] = [];
 

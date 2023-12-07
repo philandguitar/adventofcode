@@ -1,21 +1,16 @@
-import { getFileContent, logResults } from "../../utils"
+import { getFileContent } from "../../utils"
 
-const DAY = 1;
-
-const a = (): number => {
-    const lines = getFileContent(DAY);
+export const a = (): number => {
+    const lines = getFileContent(import.meta.dir);
     const res = lines.map(line => getFirstAndLast(line));
     return addResults(res)
 }
 
-
-const b = (): number => {
-    const lines = getFileContent(DAY);
+export const b = (): number => {
+    const lines = getFileContent(import.meta.dir);
     const res = lines.map(line => getFirstAndLast(line, true));
     return addResults(res)
 }
-
-export const day1 = () => logResults(DAY, a(), b())
 
 const addResults = (res: string[]) => res.reduce((prev, current) => prev + Number.parseInt(current!), 0);
 
@@ -23,7 +18,7 @@ const getFirstAndLast = (line: string, doReplacement: boolean = false) => {
     const lineArray = doReplacement ? replaceTextNumbersWithDigits(line).split("") : line.split("");
     const firstNumber = lineArray.find(element => Number.parseInt(element) > 0);
     const lastNumber = lineArray.reverse().find(element => Number.parseInt(element) > 0);
-    return firstNumber?.toString().concat(lastNumber?.toString() ?? "");
+    return firstNumber?.toString().concat(lastNumber?.toString() ?? "") ?? "";
 }
 
 const replaceTextNumbersWithDigits = (input: string) => {

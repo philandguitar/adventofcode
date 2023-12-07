@@ -1,0 +1,9 @@
+version: "3.3"
+
+services:
+  bun:
+    image: oven/bun
+    working_dir: /app
+    volumes: 
+      - .:/app
+    command: "bun run index.ts"
