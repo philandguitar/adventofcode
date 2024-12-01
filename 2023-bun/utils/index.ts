@@ -20,17 +20,17 @@ export const getFileContentAsync = async (
 
 export const getFileContent = (
   path: string,
-  fileName: string = "input.txt"
+  isTestFile: boolean = false
 ) => {
   const content = readFileSync(
-    `${path}/${fileName}`,
+    `${path}/${isTestFile ? "test.txt" : "input.txt"}`,
     "utf-8"
   );
   return content.split(/\r?\n/);
 };
 
-export const getFileMatrix = (path: string, fileName?: string) =>
-  getFileContent(path, fileName).map(line => line.split(""))
+export const getFileMatrix = (path: string, isTestFile: boolean = false) =>
+  getFileContent(path, isTestFile).map(line => line.split(""))
 
 export const stringArrayToNumberArray = (stringArr: string[]) => {
   return stringArr.map((val) => Number.parseInt(val));
