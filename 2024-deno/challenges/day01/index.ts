@@ -1,6 +1,6 @@
 import { readFileByLine } from "../../utils/file.ts";
 
-export const a = () => {
+const parseFile = () => {
   const lines = readFileByLine(import.meta.dirname);
   const listA: number[] = [];
   const listB: number[] = [];
@@ -10,6 +10,12 @@ export const a = () => {
     listA.push(parseInt(a));
     listB.push(parseInt(b));
   });
+
+  return { listA, listB };
+};
+
+export const a = () => {
+  const { listA, listB } = parseFile();
 
   listA.sort();
   listB.sort();
@@ -23,15 +29,7 @@ export const a = () => {
 };
 
 export const b = () => {
-  const lines = readFileByLine(import.meta.dirname);
-  const listA: number[] = [];
-  const listB: number[] = [];
-
-  lines.forEach((line) => {
-    const [a, b] = line.split("   ");
-    listA.push(parseInt(a));
-    listB.push(parseInt(b));
-  });
+  const { listA, listB } = parseFile();
 
   let result = 0;
   listA.forEach((a) => {
