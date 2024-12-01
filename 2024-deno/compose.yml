@@ -1,0 +1,7 @@
+services:
+  deno:
+    image: denoland/deno:2.1.1
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: "deno task dev"
