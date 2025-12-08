@@ -1,4 +1,4 @@
-import { a, b } from "./challenges/day01/index.ts";
+import { a, b } from "./challenges/day04/index.ts";
 import { logResults } from "./utils/common.ts";
 
 const t0 = performance.now();
