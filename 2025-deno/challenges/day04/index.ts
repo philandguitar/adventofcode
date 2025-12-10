@@ -12,7 +12,10 @@ const checkPosition = (matrix: string[][], row: number, col: number) => {
       checkedCol <= Math.min(matrix[0].length - 1, col + 1);
       checkedCol++
     ) {
-      if (matrix[checkedRow][checkedCol] === "@") {
+      if (
+        matrix[checkedRow][checkedCol] === "@" &&
+        !(checkedRow === row && checkedCol === col)
+      ) {
         nearbyRoles++;
       }
     }
@@ -22,7 +25,7 @@ const checkPosition = (matrix: string[][], row: number, col: number) => {
 };
 
 export const a = () => {
-  const matrix = readFileAsMatrix(import.meta.dirname, "example");
+  const matrix = readFileAsMatrix(import.meta.dirname);
 
   let removedRoles = 0;
 
@@ -34,10 +37,30 @@ export const a = () => {
     });
   });
 
-  return matrix.length;
+  return removedRoles;
 };
 
 export const b = () => {
-  const lines = readFileByLine(import.meta.dirname);
-  return lines.length;
+  const matrix = readFileAsMatrix(import.meta.dirname);
+
+  let totalRemovedRoles = 0;
+  let thisIterationRemoved = 1; // To enter the loop at least once
+
+  while (thisIterationRemoved > 0) {
+    thisIterationRemoved = 0;
+    const matrixCopy = [...matrix.map((row) => [...row])];
+
+    matrixCopy.forEach((row, rowIndex) => {
+      row.forEach((col, colIndex) => {
+        if (col === "@" && checkPosition(matrix, rowIndex, colIndex)) {
+          thisIterationRemoved++;
+          matrix[rowIndex][colIndex] = "x";
+        }
+      });
+    });
+
+    totalRemovedRoles += thisIterationRemoved;
+  }
+
+  return totalRemovedRoles;
 };
